@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '0 3 1 1 *' # every Jan 1: rebuild so the meta-tag year count updates
 permissions:
   contents: read
   pages: write

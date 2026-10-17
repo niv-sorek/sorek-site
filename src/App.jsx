@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { CONTACT, STATS, SERVICES, PROJECTS, CLIENTS } from './data.js'
+import { CONTACT, STATS, SERVICES, PROJECTS, CLIENTS, YEARS } from './data.js'
 import { Icon } from './icons.jsx'
 
 const NAV = [
@@ -93,7 +93,7 @@ function Hero() {
       <div className="wrap hero-in">
         <p className="eyebrow">משרד מהנדסים יועצים · חיפה והצפון</p>
         <h1>תכנון קונסטרוקציה<br />שבונים עליו בביטחון</h1>
-        <p className="lead">31 שנות ניסיון בתכנון קונסטרוקציות. פתרונות יצירתיים וכלכליים, בדיקת חלופות ועמידה בלוחות זמנים.</p>
+        <p className="lead">{YEARS} שנות ניסיון בתכנון קונסטרוקציות. פתרונות יצירתיים וכלכליים, בדיקת חלופות ועמידה בלוחות זמנים.</p>
         <div className="hero-cta">
           <a className="btn btn-primary btn-lg" href="#contact">קבלו הצעה לפרויקט <Icon name="arrow" /></a>
           <a className="btn btn-ghost btn-lg" href={`tel:${CONTACT.tel}`}><Icon name="phone" /> {CONTACT.phone}</a>
@@ -198,7 +198,7 @@ function About() {
         <div className="about-img reveal"><img src={img('about')} alt="תכנון הנדסי של מבנה" loading="lazy" width="900" height="434" /></div>
         <div className="reveal">
           <h2>על המשרד</h2>
-          <p>משרד שורק מהנדסים יועצים בע"מ הוקם בשנת 2014 בניהולו של <b>טל שורק</b>, בוגר הטכניון בחיפה (1990, מסלול מבנים), עם ותק וניסיון מקצועי של 31 שנים.</p>
+          <p>משרד שורק מהנדסים יועצים בע"מ הוקם בשנת 2014 בניהולו של <b>טל שורק</b>, בוגר הטכניון בחיפה (1990, מסלול מבנים), עם ותק וניסיון מקצועי של {YEARS} שנים.</p>
           <p>המשרד מתמחה בתכנון קונסטרוקציות במגוון תחומים וחומרים. צוות המהנדסים, המהנדסות והשרטטות ידוע במקצועיות ובשירות מעולה: זריזות בעבודה, פתרונות כלכליים ובדיקת חלופות, תוך הקפדה על פרטים ועמידה בלוחות זמנים.</p>
           <ul className="ticks">
             <li>פתרונות יצירתיים המותאמים למבנה וללקוח</li>

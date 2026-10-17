@@ -9,8 +9,11 @@ export const CONTACT = {
   formEndpoint: import.meta.env.VITE_FORM_ENDPOINT || '',
 }
 
+export const CAREER_START = 1990
+export const YEARS = new Date().getFullYear() - CAREER_START
+
 export const STATS = [
-  { value: '31', label: 'שנות ניסיון מקצועי' },
+  { value: String(YEARS), label: 'שנות ניסיון מקצועי' },
   { value: '2014', label: 'שנת הקמת המשרד' },
   { value: '1990', label: 'בוגר הטכניון, מסלול מבנים' },
   { value: '9+', label: 'גופים ציבוריים, חברות ויזמים' },
