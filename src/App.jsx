@@ -1,0 +1,354 @@
+import { useEffect, useState, useRef } from 'react'
+import { CONTACT, STATS, SERVICES, PROJECTS, CLIENTS } from './data.js'
+import { Icon } from './icons.jsx'
+
+const NAV = [
+  ['services', 'תחומי התמחות'],
+  ['projects', 'פרויקטים'],
+  ['about', 'אודות'],
+  ['clients', 'לקוחות'],
+  ['contact', 'יצירת קשר'],
+]
+const img = (n) => `./img/${n}.webp`
+
+function useReveal(dep) {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal:not(.in)')
+    if (!('IntersectionObserver' in window)) return els.forEach((e) => e.classList.add('in'))
+    const io = new IntersectionObserver(
+      (es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add('in'), io.unobserve(e.target))),
+      { threshold: 0.12 }
+    )
+    els.forEach((e) => io.observe(e))
+    return () => io.disconnect()
+  }, [dep])
+}
+
+function Header() {
+  const [open, setOpen] = useState(false)
+  const [solid, setSolid] = useState(false)
+  useEffect(() => {
+    const f = () => setSolid(window.scrollY > 40)
+    f()
+    window.addEventListener('scroll', f, { passive: true })
+    return () => window.removeEventListener('scroll', f)
+  }, [])
+  return (
+    <header className={`hdr ${solid || open ? 'solid' : ''}`}>
+      <div className="wrap hdr-in">
+        <a href="#top" className="logo" aria-label="שורק מהנדסים יועצים – לדף הבית">
+          <img src={img('logo')} alt="שורק מהנדסים יועצים" width="138" height="91" />
+        </a>
+        <nav className={`nav ${open ? 'open' : ''}`} aria-label="ניווט ראשי">
+          {NAV.map(([id, label]) => (
+            <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>
+          ))}
+        </nav>
+        <a className="btn btn-primary hdr-cta" href={`tel:${CONTACT.tel}`}>
+          <Icon name="phone" /> <span>{CONTACT.phone}</span>
+        </a>
+        <button className="burger" aria-label={open ? 'סגירת תפריט' : 'פתיחת תפריט'} aria-expanded={open} onClick={() => setOpen(!open)}>
+          <Icon name={open ? 'close' : 'menu'} />
+        </button>
+      </div>
+    </header>
+  )
+}
+
+const SLIDES = [
+  { base: 'hero', small: 'hero-sm', sw: 800, w: 1600, pos: '60% 50%', label: 'הרימון נוף הגליל' },
+  { base: 'hero-malka', small: 'hero-malka-sm', sw: 700, w: 1200, pos: '50% 40%', label: 'הרב מלכה, יהוד' },
+  { base: 'hero-caesarea', small: 'hero-caesarea-sm', sw: 700, w: 1200, pos: '50% 50%', label: 'קיסריה' },
+  { base: 'hero-peqiin', small: 'hero-peqiin-sm', sw: 700, w: 1200, pos: '50% 50%', label: 'פקיעין' },
+]
+
+function Hero() {
+  const [i, setI] = useState(0)
+  const [paused, setPaused] = useState(false)
+  useEffect(() => {
+    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const t = setInterval(() => setI((n) => (n + 1) % SLIDES.length), 5500)
+    return () => clearInterval(t)
+  }, [paused])
+  return (
+    <section className="hero" id="top" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      {SLIDES.map((s, k) => (
+        <img
+          key={s.base}
+          className={`hero-img ${k === i ? 'on' : ''}`}
+          src={img(s.base)}
+          srcSet={`${img(s.small)} ${s.sw}w, ${img(s.base)} ${s.w}w`}
+          sizes="100vw"
+          alt=""
+          style={{ objectPosition: s.pos }}
+          {...(k === 0 ? { fetchpriority: 'high' } : { loading: 'lazy' })}
+        />
+      ))}
+      <div className="hero-shade" />
+      <div className="hero-dots" role="group" aria-label="תמונות רקע">
+        {SLIDES.map((s, k) => (
+          <button key={s.base} className={k === i ? 'on' : ''} aria-label={`תמונה ${k + 1}: ${s.label}`} aria-pressed={k === i} onClick={() => setI(k)} />
+        ))}
+      </div>
+      <div className="wrap hero-in">
+        <p className="eyebrow">משרד מהנדסים יועצים · חיפה והצפון</p>
+        <h1>תכנון קונסטרוקציה<br />שבונים עליו בביטחון</h1>
+        <p className="lead">31 שנות ניסיון בתכנון קונסטרוקציות. פתרונות יצירתיים וכלכליים, בדיקת חלופות ועמידה בלוחות זמנים.</p>
+        <div className="hero-cta">
+          <a className="btn btn-primary btn-lg" href="#contact">קבלו הצעה לפרויקט <Icon name="arrow" /></a>
+          <a className="btn btn-ghost btn-lg" href={`tel:${CONTACT.tel}`}><Icon name="phone" /> {CONTACT.phone}</a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Stats() {
+  return (
+    <section className="stats" aria-label="עובדות על המשרד">
+      <div className="wrap stats-grid">
+        {STATS.map((s) => (
+          <div key={s.label} className="stat reveal">
+            <strong>{s.value}</strong>
+            <span>{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function Services() {
+  return (
+    <section className="sec" id="services">
+      <div className="wrap">
+        <h2 className="reveal">תחומי התמחות</h2>
+        <p className="sub reveal">מהתכנון הראשוני ועד בקרה והכשרה – כל מה שפרויקט בנייה צריך מבחינה הנדסית.</p>
+        <div className="cards">
+          {SERVICES.map((s) => (
+            <article key={s.title} className="card reveal">
+              <span className="ico"><Icon name={s.icon} /></span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </article>
+          ))}
+        </div>
+        <p className="center reveal"><a className="btn btn-primary" href="#contact">יש לכם פרויקט? נשמח לשמוע <Icon name="arrow" /></a></p>
+      </div>
+    </section>
+  )
+}
+
+function Projects() {
+  const cats = ['הכל', ...new Set(PROJECTS.map((p) => p.cat))]
+  const [cat, setCat] = useState('הכל')
+  const [sel, setSel] = useState(null)
+  const list = PROJECTS.filter((p) => cat === 'הכל' || p.cat === cat)
+  const opener = useRef(null)
+
+  useEffect(() => {
+    if (sel === null) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') close()
+      if (e.key === 'ArrowLeft') setSel((i) => (i + 1) % list.length)
+      if (e.key === 'ArrowRight') setSel((i) => (i - 1 + list.length) % list.length)
+    }
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKey) }
+  }, [sel, list.length])
+
+  function close() { setSel(null); opener.current?.focus() }
+
+  return (
+    <section className="sec alt" id="projects">
+      <div className="wrap">
+        <h2 className="reveal">פרויקטים נבחרים</h2>
+        <div className="chips" role="group" aria-label="סינון פרויקטים">
+          {cats.map((c) => (
+            <button key={c} className={`chip ${c === cat ? 'on' : ''}`} aria-pressed={c === cat} onClick={() => setCat(c)}>{c}</button>
+          ))}
+        </div>
+        <div className="grid">
+          {list.map((p, i) => (
+            <button key={p.id} className="proj" onClick={(e) => { opener.current = e.currentTarget; setSel(i) }} aria-label={`הגדלת תמונה: ${p.title}`}>
+              <img src={img(p.img)} alt={p.title} loading="lazy" width="1000" height="750" />
+              <span className="proj-cap"><small>{p.cat}</small>{p.title}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      {sel !== null && list[sel] && (
+        <div className="lb" role="dialog" aria-modal="true" aria-label={list[sel].title} onClick={close}>
+          <button className="lb-x" aria-label="סגירה" autoFocus><Icon name="close" /></button>
+          <figure onClick={(e) => e.stopPropagation()}>
+            <img src={img(list[sel].img)} alt={list[sel].title} />
+            <figcaption>{list[sel].title}</figcaption>
+          </figure>
+        </div>
+      )}
+    </section>
+  )
+}
+
+function About() {
+  return (
+    <section className="sec" id="about">
+      <div className="wrap about">
+        <div className="about-img reveal"><img src={img('about')} alt="תכנון הנדסי של מבנה" loading="lazy" width="900" height="434" /></div>
+        <div className="reveal">
+          <h2>על המשרד</h2>
+          <p>משרד שורק מהנדסים יועצים בע"מ הוקם בשנת 2014 בניהולו של <b>טל שורק</b>, בוגר הטכניון בחיפה (1990, מסלול מבנים), עם ותק וניסיון מקצועי של 31 שנים.</p>
+          <p>המשרד מתמחה בתכנון קונסטרוקציות במגוון תחומים וחומרים. צוות המהנדסים, המהנדסות והשרטטות ידוע במקצועיות ובשירות מעולה: זריזות בעבודה, פתרונות כלכליים ובדיקת חלופות, תוך הקפדה על פרטים ועמידה בלוחות זמנים.</p>
+          <ul className="ticks">
+            <li>פתרונות יצירתיים המותאמים למבנה וללקוח</li>
+            <li>זריזות ועמידה בלוחות זמנים</li>
+            <li>משרד מאמן מטעם משרד הכלכלה מאז 2014</li>
+          </ul>
+          <a className="btn btn-primary" href="#contact">דברו איתנו <Icon name="arrow" /></a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Clients() {
+  return (
+    <section className="sec alt" id="clients">
+      <div className="wrap">
+        <h2 className="reveal">בין לקוחותינו</h2>
+        <p className="sub reveal">גופים ציבוריים, חברות בנייה ויזמים פרטיים.</p>
+        <ul className="logos">
+          {CLIENTS.map((c) => (
+            <li key={c.name} className="reveal"><img src={img(c.img)} alt={c.name} loading="lazy" width="150" height="150" /></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+function Contact() {
+  const [state, setState] = useState('idle')
+  const [err, setErr] = useState('')
+  async function submit(e) {
+    e.preventDefault()
+    const f = Object.fromEntries(new FormData(e.currentTarget))
+    if (f.website) return
+    if (!f.name.trim()) return setErr('אנא הזינו שם')
+    if (!/^\+?\d{8,13}$/.test(f.phone.replace(/[\s-]/g, ''))) return setErr('אנא הזינו מספר טלפון תקין')
+    setErr('')
+    if (CONTACT.formEndpoint) {
+      setState('sending')
+      try {
+        const r = await fetch(CONTACT.formEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ name: f.name, phone: f.phone, email: f.email, message: f.message }),
+        })
+        if (!r.ok) throw new Error()
+        setState('done')
+      } catch {
+        setState('idle')
+        setErr(`אירעה שגיאה. אפשר להתקשר אלינו: ${CONTACT.phone}`)
+      }
+    } else {
+      const body = `שם: ${f.name}\nטלפון: ${f.phone}\nדוא"ל: ${f.email || ''}\n\n${f.message || ''}`
+      window.location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent('פנייה מהאתר – ' + f.name)}&body=${encodeURIComponent(body)}`
+      setState('done')
+    }
+  }
+  return (
+    <section className="sec contact" id="contact">
+      <div className="wrap contact-grid">
+        <div className="reveal">
+          <h2>בואו נדבר על הפרויקט שלכם</h2>
+          <p className="sub">השאירו פרטים ונחזור אליכם בהקדם, או התקשרו ישירות.</p>
+          <ul className="cinfo">
+            <li><Icon name="phone" /><a href={`tel:${CONTACT.tel}`}>{CONTACT.phone}</a></li>
+            <li><Icon name="mail" /><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></li>
+            <li><Icon name="pin" /><span>{CONTACT.address}</span></li>
+          </ul>
+          <p className="navlinks"><a href={CONTACT.waze} target="_blank" rel="noreferrer">ניווט ב-Waze</a> · <a href={CONTACT.maps} target="_blank" rel="noreferrer">Google Maps</a></p>
+        </div>
+        {state === 'done' ? (
+          <div className="form done" role="status">
+            <h3>תודה! הפרטים התקבלו</h3>
+            <p>ניצור איתכם קשר בהקדם. לשיחה מיידית: <a href={`tel:${CONTACT.tel}`}>{CONTACT.phone}</a></p>
+          </div>
+        ) : (
+          <form className="form reveal" onSubmit={submit} noValidate>
+            <label>שם מלא<input name="name" required autoComplete="name" /></label>
+            <label>טלפון<input name="phone" type="tel" required autoComplete="tel" inputMode="tel" dir="ltr" className="ltr" /></label>
+            <label>דוא"ל (לא חובה)<input name="email" type="email" autoComplete="email" dir="ltr" className="ltr" /></label>
+            <label>ספרו לנו על הפרויקט<textarea name="message" rows="4" /></label>
+            <input name="website" tabIndex="-1" autoComplete="off" className="hp" aria-hidden="true" />
+            {err && <p className="err" role="alert">{err}</p>}
+            <button className="btn btn-primary btn-lg" disabled={state === 'sending'}>{state === 'sending' ? 'שולח…' : 'שליחה'}</button>
+          </form>
+        )}
+      </div>
+    </section>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="ftr">
+      <div className="wrap ftr-in">
+        <img src={img('logo')} alt="שורק מהנדסים יועצים" width="104" height="68" className="ftr-logo" />
+        <p>© {new Date().getFullYear()} ז.ש.א שורק מהנדסים יועצים בע"מ · {CONTACT.address}</p>
+        <a href="#accessibility">הצהרת נגישות</a>
+      </div>
+    </footer>
+  )
+}
+
+function MobileBar() {
+  return (
+    <div className="mbar">
+      <a className="btn btn-primary" href={`tel:${CONTACT.tel}`}><Icon name="phone" /> התקשרו</a>
+      <a className="btn btn-light" href="#contact">השאירו פרטים</a>
+    </div>
+  )
+}
+
+function Accessibility() {
+  return (
+    <section className="sec legal">
+      <div className="wrap">
+        <p><a href="#top">← חזרה לאתר</a></p>
+        <h1>הצהרת נגישות</h1>
+        <p>ז.ש.א שורק מהנדסים יועצים בע"מ רואה חשיבות בהנגשת האתר לאנשים עם מוגבלות, ופועלת לאפשר גלישה נוחה לכלל הגולשים.</p>
+        <p>האתר נבנה מתוך מחויבות לעקרונות הנגישות: ניווט מלא במקלדת, מבנה כותרות סמנטי, ניגודיות צבעים גבוהה, טקסט חלופי לתמונות והתאמה לקוראי מסך ולמכשירים ניידים.</p>
+        <p>נתקלתם בקושי? נשמח לעזור ולתקן. פנו אלינו בטלפון <a href={`tel:${CONTACT.tel}`}>{CONTACT.phone}</a> או בדוא"ל <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.</p>
+      </div>
+    </section>
+  )
+}
+
+export default function App() {
+  const read = () => (window.location.hash === '#accessibility' ? 'a11y' : 'home')
+  const [page, setPage] = useState(read)
+  useEffect(() => {
+    const f = () => { setPage(read()); if (read() === 'a11y') window.scrollTo(0, 0) }
+    window.addEventListener('hashchange', f)
+    return () => window.removeEventListener('hashchange', f)
+  }, [])
+  useReveal(page)
+  return (
+    <>
+      <a className="skip" href="#main">דילוג לתוכן</a>
+      <Header />
+      <main id="main">
+        {page === 'a11y' ? <Accessibility /> : (
+          <>
+            <Hero /><Stats /><Services /><Projects /><About /><Clients /><Contact />
+          </>
+        )}
+      </main>
+      <Footer />
+      <MobileBar />
+    </>
+  )
+}
