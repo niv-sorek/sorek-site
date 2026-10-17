@@ -195,7 +195,7 @@ function About() {
   return (
     <section className="sec" id="about">
       <div className="wrap about">
-        <div className="about-img reveal"><img src={img('about')} alt="תכנון הנדסי של מבנה" loading="lazy" width="900" height="434" /></div>
+        <div className="about-img reveal"><img src={img('about')} alt="תוכניות בנייה פרושות על שולחן" loading="lazy" width="900" height="675" /></div>
         <div className="reveal">
           <h2>על המשרד</h2>
           <p>משרד שורק מהנדסים יועצים בע"מ הוקם בשנת 2014 בניהולו של <b>טל שורק</b>, בוגר הטכניון בחיפה (1990, מסלול מבנים), עם ותק וניסיון מקצועי של {YEARS} שנים.</p>
