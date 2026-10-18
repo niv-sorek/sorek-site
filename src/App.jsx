@@ -318,6 +318,7 @@ function Contact() {
             <label>ספרו לנו על הפרויקט<textarea name="message" rows="4" /></label>
             <input name="website" tabIndex="-1" autoComplete="off" className="hp" aria-hidden="true" />
             {err && <p className="err" role="alert">{err}</p>}
+            <p className="fine">בשליחת הטופס אתם מאשרים שנשתמש בפרטים כדי לחזור אליכם. ראו <a href="#privacy">מדיניות פרטיות</a>.</p>
             <button className="btn btn-primary btn-lg" disabled={state === 'sending'}>{state === 'sending' ? 'שולח…' : 'שליחה'}</button>
           </form>
         )}
@@ -366,7 +367,10 @@ function Footer() {
           <p>© {new Date().getFullYear()} ז.ש.א שורק מהנדסים יועצים בע"מ</p>
           <p>{CONTACT.address}</p>
         </div>
-        <a href="#accessibility">הצהרת נגישות</a>
+        <nav className="ftr-links" aria-label="מידע משפטי">
+          <a href="#accessibility">הצהרת נגישות</a>
+          <a href="#privacy">מדיניות פרטיות</a>
+        </nav>
       </div>
     </footer>
   )
@@ -381,25 +385,87 @@ function MobileBar() {
   )
 }
 
-function Accessibility() {
+const UPDATED = '18-10-2026'
+
+function Legal({ title, children }) {
   return (
     <section className="sec legal">
       <div className="wrap">
         <p><a href="#top">← חזרה לאתר</a></p>
-        <h1>הצהרת נגישות</h1>
-        <p>ז.ש.א שורק מהנדסים יועצים בע"מ רואה חשיבות בהנגשת האתר לאנשים עם מוגבלות, ופועלת לאפשר גלישה נוחה לכלל הגולשים.</p>
-        <p>האתר נבנה מתוך מחויבות לעקרונות הנגישות: ניווט מלא במקלדת, מבנה כותרות סמנטי, ניגודיות צבעים גבוהה, טקסט חלופי לתמונות והתאמה לקוראי מסך ולמכשירים ניידים.</p>
-        <p>נתקלתם בקושי? נשמח לעזור ולתקן. פנו אלינו בטלפון <a href={`tel:${CONTACT.tel}`}>{CONTACT.phone}</a> או בדוא"ל <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.</p>
+        <h1>{title}</h1>
+        {children}
+        <p className="legal-date">עודכן לאחרונה: {UPDATED}</p>
       </div>
     </section>
   )
 }
 
+function Accessibility() {
+  return (
+    <Legal title="הצהרת נגישות">
+      <p>ז.ש.א שורק מהנדסים יועצים בע"מ מייחסת חשיבות רבה לכך שכל לקוחותיה, ובכללם אנשים עם מוגבלות, יוכלו לקבל שירות מכבד, שוויוני, נגיש ומקצועי, גם באתר האינטרנט. בהתאם לחוק שוויון זכויות לאנשים עם מוגבלויות, התשנ"ח-1998, ולתקנות שהותקנו מכוחו, אנו פועלים להנגשת האתר ושירות הלקוחות ולשיפורם באופן שוטף.</p>
+
+      <h2>נגישות האתר</h2>
+      <p>האתר נבנה במטרה לעמוד בהמלצות התקן הישראלי ת"י 5568 לנגישות תכנים באינטרנט ברמה AA, המבוסס על הנחיות WCAG הבינלאומיות. האתר החדש טרם עבר בדיקת נגישות חיצונית מלאה, ואנו פועלים להשלמתה.</p>
+      <ul>
+        <li>ניווט מלא באמצעות המקלדת: מקש Tab למעבר בין רכיבים, Enter להפעלה, Esc לסגירת חלון, ומקשי החצים לדפדוף בגלריית הפרויקטים.</li>
+        <li>קישור "דילוג לתוכן" בראש כל עמוד.</li>
+        <li>מבנה סמנטי וכותרות מסודרות, לתמיכה בטכנולוגיות מסייעות וקוראי מסך. לקריאה נוחה עם קורא מסך מומלץ להשתמש בתוכנת NVDA העדכנית.</li>
+        <li>טקסט חלופי לתמונות, וניגודיות צבעים גבוהה.</li>
+        <li>תפריט נגישות באתר (הכפתור בפינת המסך): הגדלה והקטנה של הטקסט, ניגודיות גבוהה והדגשת קישורים. ההגדרות נשמרות בדפדפן שלכם בלבד.</li>
+        <li>התאמה למכשירים ניידים, והקטנת תנועה למי שהגדיר זאת במכשיר.</li>
+      </ul>
+
+      <h2>מגבלות ידועות</h2>
+      <p>מפת Google המוטמעת בעמוד יצירת הקשר היא תוכן של צד שלישי, וייתכן שאינה נגישה במלואה. ניתן לקבל את פרטי הכתובת בטלפון, בדוא"ל או בטקסט שבעמוד. אם נתקלתם ברכיב או בתוכן שאינו נגיש, פנו אלינו ונטפל בכך.</p>
+
+      <h2>שירות לקוחות נגיש</h2>
+      <p>המשרד אינו מקבל קהל. השירות ניתן בטלפון, בדוא"ל ובטופס שבאתר, במענה אישי ובשפה ברורה. מידע ניתן לקבל גם בפורמט נגיש, ללא עלות, לאנשים עם מוגבלות. לבקשה כזו פנו לרכז הנגישות.</p>
+      <p>דרכי יצירת קשר: טלפון <a href={`tel:${CONTACT.tel}`}>{CONTACT.phone}</a>, דוא"ל <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.</p>
+
+      <h2>רכז הנגישות</h2>
+      <p>טל שורק<br />טלפון: <a href={`tel:${CONTACT.tel}`}>{CONTACT.phone}</a><br />דוא"ל: <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></p>
+    </Legal>
+  )
+}
+
+function Privacy() {
+  return (
+    <Legal title="מדיניות פרטיות">
+      <p>ז.ש.א שורק מהנדסים יועצים בע"מ ({CONTACT.address}) מכבדת את פרטיות המבקרים באתר. להלן מה אנו אוספים, למה, ומה הזכויות שלכם.</p>
+
+      <h2>איזה מידע נאסף</h2>
+      <p>אנו אוספים רק את המידע שאתם מוסרים בטופס יצירת הקשר: שם, מספר טלפון, כתובת דוא"ל (לא חובה) והודעה חופשית. מסירת המידע אינה חובה, אך בלעדיו לא נוכל לחזור אליכם.</p>
+
+      <h2>למה אנו משתמשים בו</h2>
+      <p>המידע משמש אך ורק כדי לחזור אליכם ולטפל בפנייתכם. איננו מוכרים אותו, ואיננו משתמשים בו לדיוור שיווקי ללא הסכמתכם.</p>
+
+      <h2>למי הוא מועבר</h2>
+      <p>הפנייה מגיעה לדוא"ל המשרד. בהתאם לאופן שבו הטופס מוגדר, היא עשויה לעבור דרך שירות טפסים של צד שלישי, ועשויה להיות מעובדת בשרתים מחוץ לישראל, או להישלח דרך תוכנת הדוא"ל שבמכשיר שלכם. מעבר לכך, המידע לא יימסר לגורם אחר, אלא אם נידרש לכך על פי דין.</p>
+
+      <h2>כמה זמן נשמר</h2>
+      <p>המידע נשמר כל עוד הדבר נדרש לטיפול בפנייה ולהמשך הקשר עמכם, ולאחר מכן נמחק.</p>
+
+      <h2>עוגיות ואחסון בדפדפן</h2>
+      <p>האתר אינו משתמש בעוגיות פרסום או במעקב, ואינו כולל כלי ניתוח תנועה. הגדרות תפריט הנגישות נשמרות בדפדפן שלכם בלבד. כאשר מפת Google נטענת בעמוד, Google עשויה לאסוף נתונים בהתאם למדיניות הפרטיות שלה.</p>
+
+      <h2>הזכויות שלכם</h2>
+      <p>על פי חוק הגנת הפרטיות, התשמ"א-1981, אתם רשאים לבקש לעיין במידע שנשמר עליכם, לתקן אותו או למחוק אותו. לפנייה: <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a> או בטלפון <a href={`tel:${CONTACT.tel}`}>{CONTACT.phone}</a>.</p>
+    </Legal>
+  )
+}
+
 export default function App() {
-  const read = () => (window.location.hash === '#accessibility' ? 'a11y' : 'home')
+  const read = () => (window.location.hash === '#accessibility' ? 'a11y' : window.location.hash === '#privacy' ? 'privacy' : 'home')
   const [page, setPage] = useState(read)
   useEffect(() => {
-    const f = () => { setPage(read()); if (read() === 'a11y') window.scrollTo(0, 0) }
+    const f = () => {
+      const next = read()
+      setPage(next)
+      if (next !== 'home') return window.scrollTo(0, 0)
+      const id = window.location.hash.slice(1)
+      if (id) requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView())
+    }
     window.addEventListener('hashchange', f)
     return () => window.removeEventListener('hashchange', f)
   }, [])
@@ -409,7 +475,7 @@ export default function App() {
       <a className="skip" href="#main">דילוג לתוכן</a>
       <Header />
       <main id="main">
-        {page === 'a11y' ? <Accessibility /> : (
+        {page === 'a11y' ? <Accessibility /> : page === 'privacy' ? <Privacy /> : (
           <>
             <Hero /><Stats /><Services /><Projects /><About /><Clients /><Contact />
           </>
