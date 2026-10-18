@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { CONTACT, STATS, SERVICES, PROJECTS, CLIENTS, YEARS, FAQ } from './data.js'
 import { Icon } from './icons.jsx'
-import { SITE, HOME, SERVICE_PAGES, findService, isKnown, normPath, routeMeta } from './pages.js'
 
 const NAV = [
-  ...SERVICE_PAGES.map((p) => [p.path, p.nav]),
-  ['/projects/', 'פרויקטים'],
-  ['/#about', 'אודות'],
+  ['services', 'תחומי התמחות'],
+  ['projects', 'פרויקטים'],
+  ['about', 'אודות'],
+  ['clients', 'לקוחות'],
+  ['contact', 'יצירת קשר'],
 ]
-const img = (n) => `/img/${n}.webp`
+const img = (n) => `./img/${n}.webp`
 
 function useReveal(dep) {
   useEffect(() => {
@@ -23,7 +24,7 @@ function useReveal(dep) {
   }, [dep])
 }
 
-function Header({ forceSolid, hasContact }) {
+function Header() {
   const [open, setOpen] = useState(false)
   const [solid, setSolid] = useState(false)
   useEffect(() => {
@@ -33,16 +34,15 @@ function Header({ forceSolid, hasContact }) {
     return () => window.removeEventListener('scroll', f)
   }, [])
   return (
-    <header className={`hdr ${solid || open || forceSolid ? 'solid' : ''}`}>
+    <header className={`hdr ${solid || open ? 'solid' : ''}`}>
       <div className="wrap hdr-in">
-        <a href="/" className="logo" aria-label="שורק מהנדסים יועצים – לדף הבית">
-          <img src="/img/logo-mark.svg" alt="שורק מהנדסים יועצים" width="77" height="56" />
+        <a href="#top" className="logo" aria-label="שורק מהנדסים יועצים – לדף הבית">
+          <img src="./img/logo-mark.svg" alt="שורק מהנדסים יועצים" width="77" height="56" />
         </a>
         <nav className={`nav ${open ? 'open' : ''}`} aria-label="ניווט ראשי">
-          {NAV.map(([href, label]) => (
-            <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>
+          {NAV.map(([id, label]) => (
+            <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>
           ))}
-          <a href={hasContact ? '#contact' : '/#contact'} onClick={() => setOpen(false)}>יצירת קשר</a>
         </nav>
         <a className="btn btn-primary hdr-cta" href={`tel:${CONTACT.tel}`}>
           <Icon name="phone" /> <span>{CONTACT.phone}</span>
@@ -130,7 +130,6 @@ function Services() {
               <span className="ico"><Icon name={s.icon} /></span>
               <h3>{s.title}</h3>
               <p>{s.text}</p>
-              {s.href && <a className="more" href={s.href}>למידע נוסף</a>}
             </article>
           ))}
         </div>
@@ -143,7 +142,7 @@ function Services() {
 function ProjectDialog({ project, onClose }) {
   const [n, setN] = useState(0)
   const count = project.gallery
-  const src = (k) => `/img/projects/${project.id}-${k + 1}.webp`
+  const src = (k) => `./img/projects/${project.id}-${k + 1}.webp`
   const next = () => setN((i) => (i + 1) % count)
   const prev = () => setN((i) => (i - 1 + count) % count)
 
@@ -193,25 +192,23 @@ function ProjectDialog({ project, onClose }) {
   )
 }
 
-function Projects({ full }) {
+function Projects() {
   const cats = ['הכל', ...new Set(PROJECTS.map((p) => p.cat))]
   const [cat, setCat] = useState('הכל')
   const [sel, setSel] = useState(null)
-  const list = full ? PROJECTS.filter((p) => cat === 'הכל' || p.cat === cat) : PROJECTS.slice(0, 3)
+  const list = PROJECTS.filter((p) => cat === 'הכל' || p.cat === cat)
   const opener = useRef(null)
   const close = useCallback(() => { setSel(null); opener.current?.focus() }, [])
 
   return (
-    <section className={`sec ${full ? "first" : "alt"}`} id="projects">
+    <section className="sec alt" id="projects">
       <div className="wrap">
-        {full ? <h1>פרויקטים נבחרים</h1> : <h2 className="reveal">פרויקטים נבחרים</h2>}
-        {full && (
-          <div className="chips" role="group" aria-label="סינון פרויקטים">
-            {cats.map((c) => (
-              <button key={c} className={`chip ${c === cat ? 'on' : ''}`} aria-pressed={c === cat} onClick={() => setCat(c)}>{c}</button>
-            ))}
-          </div>
-        )}
+        <h2 className="reveal">פרויקטים נבחרים</h2>
+        <div className="chips" role="group" aria-label="סינון פרויקטים">
+          {cats.map((c) => (
+            <button key={c} className={`chip ${c === cat ? 'on' : ''}`} aria-pressed={c === cat} onClick={() => setCat(c)}>{c}</button>
+          ))}
+        </div>
         <div className="grid">
           {list.map((p) => (
             <button key={p.id} className="proj" onClick={(e) => { opener.current = e.currentTarget; setSel(p) }} aria-label={`לפרטי הפרויקט: ${p.title}`}>
@@ -221,7 +218,6 @@ function Projects({ full }) {
             </button>
           ))}
         </div>
-        {!full && <p className="center"><a className="btn btn-primary" href="/projects/">לכל הפרויקטים <Icon name="arrow" /></a></p>}
       </div>
       {sel && <ProjectDialog project={sel} onClose={close} />}
     </section>
@@ -342,7 +338,7 @@ function Contact() {
             <label>ספרו לנו על הפרויקט<textarea name="message" rows="4" /></label>
             <input name="website" tabIndex="-1" autoComplete="off" className="hp" aria-hidden="true" />
             {err && <p className="err" role="alert">{err}</p>}
-            <p className="fine">בשליחת הטופס הנך מאשר את השימוש בפרטים לצורך יצירת קשר עמך, בהתאם ל <a href="/privacy/">מדיניות פרטיות</a>.</p>
+            <p className="fine">בשליחת הטופס הנך מאשר את השימוש בפרטים לצורך יצירת קשר עמך, בהתאם ל <a href="#privacy">מדיניות פרטיות</a>.</p>
             <button className="btn btn-primary btn-lg" disabled={state === 'sending'}>{state === 'sending' ? 'שולח…' : 'שליחה'}</button>
           </form>
         )}
@@ -375,7 +371,7 @@ function A11yToolbar() {
           <button aria-pressed={s.contrast} onClick={() => setS({ ...s, contrast: !s.contrast })}>ניגודיות גבוהה</button>
           <button aria-pressed={s.links} onClick={() => setS({ ...s, links: !s.links })}>הדגשת קישורים</button>
           <button onClick={() => setS({ size: 0, contrast: false, links: false })}>איפוס</button>
-          <a href="/accessibility/" onClick={() => setOpen(false)}>הצהרת נגישות</a>
+          <a href="#accessibility" onClick={() => setOpen(false)}>הצהרת נגישות</a>
         </div>
       )}
     </div>
@@ -386,25 +382,25 @@ function Footer() {
   return (
     <footer className="ftr">
       <div className="wrap ftr-in">
-        <img src="/img/logo-full-reversed.svg" alt="שורק מהנדסים יועצים" width="163" height="120" className="ftr-logo" />
+        <img src="./img/logo-full-reversed.svg" alt="שורק מהנדסים יועצים" width="163" height="120" className="ftr-logo" />
         <div className="ftr-text">
           <p>© {new Date().getFullYear()} ז.ש.א שורק מהנדסים יועצים בע"מ</p>
           <p>{CONTACT.address}</p>
         </div>
         <nav className="ftr-links" aria-label="מידע משפטי">
-          <a href="/accessibility/">הצהרת נגישות</a>
-          <a href="/privacy/">מדיניות פרטיות</a>
+          <a href="#accessibility">הצהרת נגישות</a>
+          <a href="#privacy">מדיניות פרטיות</a>
         </nav>
       </div>
     </footer>
   )
 }
 
-function MobileBar({ hasContact }) {
+function MobileBar() {
   return (
     <div className="mbar">
       <a className="btn btn-primary" href={`tel:${CONTACT.tel}`}><Icon name="phone" /> התקשרו</a>
-      <a className="btn btn-light" href={hasContact ? "#contact" : "/#contact"}>השאירו פרטים</a>
+      <a className="btn btn-light" href="#contact">השאירו פרטים</a>
     </div>
   )
 }
@@ -415,7 +411,7 @@ function Legal({ title, children }) {
   return (
     <section className="sec legal">
       <div className="wrap">
-        <p><a href="/">← חזרה לאתר</a></p>
+        <p><a href="#top">← חזרה לאתר</a></p>
         <h1>{title}</h1>
         {children}
         <p className="legal-date">עודכן לאחרונה: {UPDATED}</p>
@@ -479,130 +475,34 @@ function Privacy() {
   )
 }
 
-function ServicePage({ page }) {
-  return (
-    <>
-      <section className="sec first">
-        <div className="wrap prose">
-          <h1>{page.h1}</h1>
-          <p className="lead-p">{page.lead}</p>
-          {page.sections.map((sec) => (
-            <div key={sec.h}>
-              <h2>{sec.h}</h2>
-              {sec.p?.map((t) => <p key={t}>{t}</p>)}
-              {sec.list && <ul className="ticks">{sec.list.map((t) => <li key={t}>{t}</li>)}</ul>}
-            </div>
-          ))}
-          <p className="center"><a className="btn btn-primary" href="#contact">קבלו הצעה לפרויקט <Icon name="arrow" /></a></p>
-        </div>
-      </section>
-      <section className="sec alt">
-        <div className="wrap">
-          <h2>שירותים נוספים</h2>
-          <div className="cards">
-            {SERVICE_PAGES.filter((p) => p.path !== page.path).map((p) => (
-              <a key={p.path} className="card more-card" href={p.path}><h3>{p.nav}</h3><p>{p.lead.split('.')[0]}.</p></a>
-            ))}
-            <a className="card more-card" href="/projects/"><h3>פרויקטים נבחרים</h3><p>מגורים, חניונים, קירות תומכים ואולמות ספורט בחיפה ובכל הארץ.</p></a>
-          </div>
-        </div>
-      </section>
-    </>
-  )
-}
-
-function NotFound() {
-  return (
-    <section className="sec first legal">
-      <div className="wrap">
-        <h1>העמוד לא נמצא</h1>
-        <p>הכתובת שחיפשתם אינה קיימת. <a href="/">חזרה לדף הבית</a></p>
-      </div>
-    </section>
-  )
-}
-
-function setMeta(sel, attr, val) {
-  const el = document.querySelector(sel)
-  if (el) el.setAttribute(attr, val)
-}
-
-export default function App({ path: initial }) {
-  const [path, setPath] = useState(() => normPath(initial ?? (typeof window === 'undefined' ? '/' : window.location.pathname)))
-  const first = useRef(true)
-
+export default function App() {
+  const read = () => typeof window === 'undefined' ? 'home' : (window.location.hash === '#accessibility' ? 'a11y' : window.location.hash === '#privacy' ? 'privacy' : 'home')
+  const [page, setPage] = useState(read)
   useEffect(() => {
-    const h = window.location.hash
-    if (h === '#privacy' || h === '#accessibility') {
-      const np = `/${h.slice(1)}/`
-      window.history.replaceState(null, '', np)
-      setPath(np)
+    const f = () => {
+      const next = read()
+      setPage(next)
+      if (next !== 'home') return window.scrollTo(0, 0)
+      const id = window.location.hash.slice(1)
+      if (id) requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView())
     }
-    const onClick = (e) => {
-      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
-      const a = e.target.closest?.('a')
-      if (!a || a.target || a.hasAttribute('download')) return
-      const u = new URL(a.href, window.location.href)
-      if (u.origin !== window.location.origin) return
-      if (normPath(u.pathname) === normPath(window.location.pathname)) return
-      e.preventDefault()
-      window.history.pushState(null, '', u.pathname + u.search + u.hash)
-      setPath(normPath(u.pathname))
-    }
-    const onPop = () => setPath(normPath(window.location.pathname))
-    document.addEventListener('click', onClick)
-    window.addEventListener('popstate', onPop)
-    return () => { document.removeEventListener('click', onClick); window.removeEventListener('popstate', onPop) }
+    window.addEventListener('hashchange', f)
+    return () => window.removeEventListener('hashchange', f)
   }, [])
-
-  useEffect(() => {
-    if (first.current) { first.current = false; return }
-    const id = window.location.hash.slice(1)
-    const el = id && document.getElementById(id)
-    if (el) el.scrollIntoView()
-    else window.scrollTo({ top: 0, behavior: 'instant' })
-    const m = routeMeta(path)
-    if (m) {
-      document.title = m.title
-      setMeta('meta[name="description"]', 'content', m.description)
-      setMeta('link[rel="canonical"]', 'href', m.canonical)
-      setMeta('meta[property="og:url"]', 'content', m.canonical)
-      setMeta('meta[property="og:title"]', 'content', m.title)
-      setMeta('meta[property="og:description"]', 'content', m.description)
-      setMeta('meta[name="robots"]', 'content', m.noindex ? 'noindex' : 'index, follow, max-image-preview:large, max-snippet:-1')
-    } else {
-      document.title = HOME.title
-      setMeta('meta[name="description"]', 'content', HOME.description)
-      setMeta('link[rel="canonical"]', 'href', SITE + '/')
-      setMeta('meta[property="og:url"]', 'content', SITE + '/')
-      setMeta('meta[property="og:title"]', 'content', HOME.ogTitle)
-      setMeta('meta[property="og:description"]', 'content', HOME.ogDescription)
-    }
-  }, [path])
-
-  useReveal(path)
-  const service = findService(path)
-  const legal = path === '/privacy/' || path === '/accessibility/'
-  const hasContact = isKnown(path) && !legal
+  useReveal(page)
   return (
     <>
       <a className="skip" href="#main">דילוג לתוכן</a>
-      <Header forceSolid={path !== '/'} hasContact={hasContact} />
+      <Header />
       <main id="main">
-        {path === '/' ? (
+        {page === 'a11y' ? <Accessibility /> : page === 'privacy' ? <Privacy /> : (
           <>
             <Hero /><Stats /><Services /><Projects /><About /><Clients /><Faq /><Contact />
           </>
-        ) : service ? (
-          <><ServicePage page={service} /><Contact /></>
-        ) : path === '/projects/' ? (
-          <><Projects full /><Contact /></>
-        ) : path === '/privacy/' ? <Privacy />
-        : path === '/accessibility/' ? <Accessibility />
-        : <NotFound />}
+        )}
       </main>
       <Footer />
-      <MobileBar hasContact={hasContact} />
+      <MobileBar />
       <A11yToolbar />
     </>
   )

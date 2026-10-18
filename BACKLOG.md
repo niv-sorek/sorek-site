@@ -15,7 +15,7 @@
 - [ ] Validate: Rich Results Test, PageSpeed, social preview
 
 ## Phase 3 – Ideas (need user input/content)
-- [x] Real URLs + per-route prerender (`src/pages.js`, `scripts/prerender.mjs`): /structural-design/, /bill-of-quantities/, /design-review/, /projects/, /privacy/, /accessibility/, 404.html. Hebrew copy is a DRAFT - needs Tal's review
+- [ ] Multi-page split: built, then REVERTED at user's request (copy felt too wordy/AI). See commits 456fa33..c7883c6 if revisited; home page stays single-page with `#` routes
 - [ ] www.sorek.co.il still serves old site -> 301 to apex (DNS/host)
 - [ ] sameAs/social links, opening hours (need real data)
 - [x] FAQ section + FAQ markup (draft answers, need Tal's review)
