@@ -124,14 +124,15 @@ function Services() {
       <div className="wrap">
         <h2 className="reveal">תחומי התמחות</h2>
         <p className="sub reveal">מהתכנון הראשוני ועד בקרה והכשרה – כל מה שפרויקט בנייה צריך מבחינה הנדסית.</p>
-        <ul className="spec">
+        <div className="cards">
           {SERVICES.map((s) => (
-            <li key={s.title} className="reveal">
+            <article key={s.title} className="card reveal">
+              <span className="ico"><Icon name={s.icon} /></span>
               <h3>{s.title}</h3>
               <p>{s.text}</p>
-            </li>
+            </article>
           ))}
-        </ul>
+        </div>
         <p className="center reveal"><a className="btn btn-primary" href="#contact">יש לכם פרויקט? נשמח לשמוע <Icon name="arrow" /></a></p>
       </div>
     </section>
