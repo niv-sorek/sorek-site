@@ -91,7 +91,7 @@ function Hero() {
         ))}
       </div>
       <div className="wrap hero-in">
-        <p className="eyebrow">משרד מהנדסים יועצים · חיפה והצפון</p>
+        <p className="eyebrow">משרד מהנדסים יועצים · חיפה ובכל הארץ</p>
         <h1>תכנון קונסטרוקציה<br />שבונים עליו בביטחון</h1>
         <p className="lead">{YEARS} שנות ניסיון בתכנון קונסטרוקציות. פתרונות יצירתיים וכלכליים, בדיקת חלופות ועמידה בלוחות זמנים.</p>
         <div className="hero-cta">
@@ -503,7 +503,7 @@ function ServicePage({ page }) {
             {SERVICE_PAGES.filter((p) => p.path !== page.path).map((p) => (
               <a key={p.path} className="card more-card" href={p.path}><h3>{p.nav}</h3><p>{p.lead.split('.')[0]}.</p></a>
             ))}
-            <a className="card more-card" href="/projects/"><h3>פרויקטים נבחרים</h3><p>מגורים, חניונים, קירות תומכים ואולמות ספורט בחיפה והצפון.</p></a>
+            <a className="card more-card" href="/projects/"><h3>פרויקטים נבחרים</h3><p>מגורים, חניונים, קירות תומכים ואולמות ספורט בחיפה ובכל הארץ.</p></a>
           </div>
         </div>
       </section>
