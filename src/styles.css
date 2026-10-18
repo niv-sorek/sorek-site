@@ -139,7 +139,7 @@ p { margin: 0 0 1em; }
 .ftr-text { flex: 1; }
 .ftr-text p { margin: 0 0 2px; }
 .ftr a { color: #dbeaf3; }
-.ftr-logo { background: #fff; border-radius: 8px; padding: 4px 8px; height: 52px; width: auto; }
+.ftr-logo { height: 120px; width: auto; }
 .legal { padding-top: 130px; min-height: 70vh; }
 .legal .wrap { max-width: 760px; }
 .legal h1 { margin-bottom: .8em; }
