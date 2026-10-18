@@ -362,7 +362,10 @@ function Footer() {
     <footer className="ftr">
       <div className="wrap ftr-in">
         <img src={img('logo')} alt="שורק מהנדסים יועצים" width="104" height="68" className="ftr-logo" />
-        <p>© {new Date().getFullYear()} ז.ש.א שורק מהנדסים יועצים בע"מ · {CONTACT.address}</p>
+        <div className="ftr-text">
+          <p>© {new Date().getFullYear()} ז.ש.א שורק מהנדסים יועצים בע"מ</p>
+          <p>{CONTACT.address}</p>
+        </div>
         <a href="#accessibility">הצהרת נגישות</a>
       </div>
     </footer>
