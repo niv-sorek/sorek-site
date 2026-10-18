@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
-import { CONTACT, STATS, SERVICES, PROJECTS, CLIENTS, YEARS } from './data.js'
+import { CONTACT, STATS, SERVICES, PROJECTS, CLIENTS, YEARS, FAQ } from './data.js'
 import { Icon } from './icons.jsx'
 
 const NAV = [
@@ -212,7 +212,7 @@ function Projects() {
         <div className="grid">
           {list.map((p) => (
             <button key={p.id} className="proj" onClick={(e) => { opener.current = e.currentTarget; setSel(p) }} aria-label={`לפרטי הפרויקט: ${p.title}`}>
-              <img src={img(p.img)} alt={p.title} loading="lazy" width="1000" height="750" />
+              <img src={img(p.img)} alt={p.alt || p.title} loading="lazy" width="1000" height="750" />
               <span className="proj-badge">{p.gallery} תמונות</span>
               <span className="proj-cap"><small>{p.cat}</small>{p.title}</span>
             </button>
@@ -256,6 +256,26 @@ function Clients() {
             <li key={c.name} className="reveal"><img src={img(c.img)} alt={c.name} loading="lazy" width="150" height="150" /></li>
           ))}
         </ul>
+      </div>
+    </section>
+  )
+}
+
+function Faq() {
+  const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }
+  return (
+    <section className="sec" id="faq">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      <div className="wrap">
+        <h2 className="reveal">שאלות נפוצות</h2>
+        <div className="faq">
+          {FAQ.map((f) => (
+            <details key={f.q} className="reveal">
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
       </div>
     </section>
   )
@@ -477,7 +497,7 @@ export default function App() {
       <main id="main">
         {page === 'a11y' ? <Accessibility /> : page === 'privacy' ? <Privacy /> : (
           <>
-            <Hero /><Stats /><Services /><Projects /><About /><Clients /><Contact />
+            <Hero /><Stats /><Services /><Projects /><About /><Clients /><Faq /><Contact />
           </>
         )}
       </main>

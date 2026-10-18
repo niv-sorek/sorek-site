@@ -250,3 +250,9 @@ html.ul a { text-decoration: underline !important; }
   .ftr-text { flex: none; }
   .a11y-fab { width: 42px; height: 42px; }
 }
+
+.faq { max-width: 780px; margin-inline: auto; display: grid; gap: 10px; }
+.faq details { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; padding: 0 18px; }
+.faq summary { cursor: pointer; font-weight: 700; color: var(--navy); padding: 16px 0; }
+.faq details[open] summary { border-bottom: 1px solid var(--line); }
+.faq p { margin: 0; padding: 14px 0 18px; }
