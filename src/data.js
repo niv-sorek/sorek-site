@@ -4,6 +4,7 @@ export const CONTACT = {
   email: 'sorek-eng@walla.co.il',
   address: 'שדרות גולומב 19, חיפה 3339116',
   maps: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('שדרות גולומב 19 חיפה'),
+  mapEmbed: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13413.392927736373!2d34.989328!3d32.809537!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151dbbadfd38a05f%3A0xefedc7e21a9ec4fc!2sSderot%20Eliyahu%20Golomb%2019%2C%20Haifa%2C%20Israel!5e0!3m2!1siw!2sil!4v1719413869165!5m2!1siw!2sil',
   waze: 'https://waze.com/ul?q=' + encodeURIComponent('שדרות גולומב 19 חיפה') + '&navigate=yes',
   // Optional: set a Formspree/Getform endpoint to receive leads by email without opening a mail app
   formEndpoint: import.meta.env.VITE_FORM_ENDPOINT || '',
@@ -27,12 +28,12 @@ export const SERVICES = [
 ]
 
 export const PROJECTS = [
-  { id: 'rimon', cat: 'מגורים', title: 'הרימון נוף הגליל', img: 'p-rimon' },
-  { id: 'caesarea', cat: 'מגורים', title: 'קיסריה', img: 'p-caesarea' },
-  { id: 'malka', cat: 'מגורים', title: 'הרב מלכה יהוד', img: 'p-malka' },
-  { id: 'ramat-hanasi', cat: 'קירות תומכים', title: 'חיזוק קיר תומך בשכונת רמת הנשיא בחיפה', img: 'p-ramat-hanasi' },
-  { id: 'peqiin', cat: 'קירות תומכים', title: 'הקמת שכונת חיילים משוחררים בפקיעין', img: 'p-peqiin' },
-  { id: 'sports-hall', cat: 'אולמות ספורט', title: "אולם ספורט עבד אלרחמן חאג'", img: 'p-sports-hall' },
+  { id: 'rimon', cat: 'מגורים', title: 'הרימון נוף הגליל', img: 'p-rimon', gallery: 3, desc: '102 יחידות דיור בשלושה מבנים על חניון משותף, תוכנן עבור חברת בונה ריינה בע"מ.' },
+  { id: 'caesarea', cat: 'מגורים', title: 'קיסריה', img: 'p-caesarea', gallery: 3, desc: '80 יחידות דיור ו-900 מ"ר של מסחר, מעל 7,500 מ"ר של 2 קומות חניון תת-קרקעי. תוכנן עבור חברת עץ השקד בע"מ.' },
+  { id: 'malka', cat: 'מגורים', title: 'הרב מלכה יהוד', img: 'p-malka', gallery: 2, desc: '182 יחידות דיור בשני מבנים בני 16 קומות, מעל 2 קומות חניון בשטח של כ-6,000 מ"ר.' },
+  { id: 'ramat-hanasi', cat: 'קירות תומכים', title: 'חיזוק קיר תומך בשכונת רמת הנשיא בחיפה', img: 'p-ramat-hanasi', gallery: 2, desc: 'חיזוק הקיר בעוגני קרקע. תוכנן עבור עיריית חיפה על ידי חברת יפה נוף.' },
+  { id: 'peqiin', cat: 'קירות תומכים', title: 'הקמת שכונת חיילים משוחררים בפקיעין', img: 'p-peqiin', gallery: 2, desc: '22,000 מ"ר של קירות תומכים. תוכנן עבור משרד השיכון, החברה המנהלת עמק איילון בע"מ.' },
+  { id: 'sports-hall', cat: 'אולמות ספורט', title: "אולם ספורט עבד אלרחמן חאג'", img: 'p-sports-hall', gallery: 2, desc: 'בנייה קונבנציונלית עם גג פלדה. תוכנן עבור עיריית חיפה על ידי חברת יפה נוף.' },
 ]
 
 export const CLIENTS = [

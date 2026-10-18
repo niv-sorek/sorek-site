@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { CONTACT, STATS, SERVICES, PROJECTS, CLIENTS, YEARS } from './data.js'
 import { Icon } from './icons.jsx'
 
@@ -139,26 +139,66 @@ function Services() {
   )
 }
 
+function ProjectDialog({ project, onClose }) {
+  const [n, setN] = useState(0)
+  const count = project.gallery
+  const src = (k) => `./img/projects/${project.id}-${k + 1}.webp`
+  const next = () => setN((i) => (i + 1) % count)
+  const prev = () => setN((i) => (i - 1 + count) % count)
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') next()
+      if (e.key === 'ArrowRight') prev()
+    }
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKey) }
+  }, [count, onClose])
+
+  return (
+    <div className="lb" role="dialog" aria-modal="true" aria-label={project.title} onClick={onClose}>
+      <div className="pd" onClick={(e) => e.stopPropagation()}>
+        <button className="lb-x" aria-label="סגירה" onClick={onClose} autoFocus><Icon name="close" /></button>
+        <div className="pd-media">
+          <div className="pd-main">
+            <img key={n} src={src(n)} alt={`${project.title} – תמונה ${n + 1} מתוך ${count}`} />
+            {count > 1 && (
+              <>
+                <button className="pd-nav pd-prev" onClick={prev} aria-label="התמונה הקודמת"><Icon name="arrow" /></button>
+                <button className="pd-nav pd-next" onClick={next} aria-label="התמונה הבאה"><Icon name="arrow" /></button>
+              </>
+            )}
+          </div>
+          {count > 1 && (
+            <div className="pd-thumbs">
+              {Array.from({ length: count }, (_, k) => (
+                <button key={k} className={k === n ? 'on' : ''} onClick={() => setN(k)} aria-label={`תמונה ${k + 1}`} aria-pressed={k === n}>
+                  <img src={src(k)} alt="" loading="lazy" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="pd-info">
+          <small>{project.cat}</small>
+          <h3>{project.title}</h3>
+          <p>{project.desc}</p>
+          <a className="btn btn-primary" href="#contact" onClick={onClose}>רוצים פרויקט דומה? דברו איתנו <Icon name="arrow" /></a>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function Projects() {
   const cats = ['הכל', ...new Set(PROJECTS.map((p) => p.cat))]
   const [cat, setCat] = useState('הכל')
   const [sel, setSel] = useState(null)
   const list = PROJECTS.filter((p) => cat === 'הכל' || p.cat === cat)
   const opener = useRef(null)
-
-  useEffect(() => {
-    if (sel === null) return
-    const onKey = (e) => {
-      if (e.key === 'Escape') close()
-      if (e.key === 'ArrowLeft') setSel((i) => (i + 1) % list.length)
-      if (e.key === 'ArrowRight') setSel((i) => (i - 1 + list.length) % list.length)
-    }
-    document.body.style.overflow = 'hidden'
-    window.addEventListener('keydown', onKey)
-    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKey) }
-  }, [sel, list.length])
-
-  function close() { setSel(null); opener.current?.focus() }
+  const close = useCallback(() => { setSel(null); opener.current?.focus() }, [])
 
   return (
     <section className="sec alt" id="projects">
@@ -170,23 +210,16 @@ function Projects() {
           ))}
         </div>
         <div className="grid">
-          {list.map((p, i) => (
-            <button key={p.id} className="proj" onClick={(e) => { opener.current = e.currentTarget; setSel(i) }} aria-label={`הגדלת תמונה: ${p.title}`}>
+          {list.map((p) => (
+            <button key={p.id} className="proj" onClick={(e) => { opener.current = e.currentTarget; setSel(p) }} aria-label={`לפרטי הפרויקט: ${p.title}`}>
               <img src={img(p.img)} alt={p.title} loading="lazy" width="1000" height="750" />
+              <span className="proj-badge">{p.gallery} תמונות</span>
               <span className="proj-cap"><small>{p.cat}</small>{p.title}</span>
             </button>
           ))}
         </div>
       </div>
-      {sel !== null && list[sel] && (
-        <div className="lb" role="dialog" aria-modal="true" aria-label={list[sel].title} onClick={close}>
-          <button className="lb-x" aria-label="סגירה" autoFocus><Icon name="close" /></button>
-          <figure onClick={(e) => e.stopPropagation()}>
-            <img src={img(list[sel].img)} alt={list[sel].title} />
-            <figcaption>{list[sel].title}</figcaption>
-          </figure>
-        </div>
-      )}
+      {sel && <ProjectDialog project={sel} onClose={close} />}
     </section>
   )
 }
@@ -270,6 +303,7 @@ function Contact() {
             <li><Icon name="pin" /><span>{CONTACT.address}</span></li>
           </ul>
           <p className="navlinks"><a href={CONTACT.waze} target="_blank" rel="noreferrer">ניווט ב-Waze</a> · <a href={CONTACT.maps} target="_blank" rel="noreferrer">Google Maps</a></p>
+          <iframe className="map" title="מפת המשרד – שדרות גולומב 19, חיפה" src={CONTACT.mapEmbed} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
         </div>
         {state === 'done' ? (
           <div className="form done" role="status">
@@ -289,6 +323,37 @@ function Contact() {
         )}
       </div>
     </section>
+  )
+}
+
+function A11yToolbar() {
+  const [open, setOpen] = useState(false)
+  const [s, setS] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('a11y')) || { size: 0, contrast: false, links: false } } catch { return { size: 0, contrast: false, links: false } }
+  })
+  useEffect(() => {
+    const r = document.documentElement
+    r.style.fontSize = `${100 + s.size * 12.5}%`
+    r.classList.toggle('hc', s.contrast)
+    r.classList.toggle('ul', s.links)
+    try { localStorage.setItem('a11y', JSON.stringify(s)) } catch {}
+  }, [s])
+  return (
+    <div className="a11y">
+      <button className="a11y-fab" aria-expanded={open} aria-controls="a11y-panel" aria-label="תפריט נגישות" onClick={() => setOpen(!open)}>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="1.8" /><path d="M5 8.5l7 1.5 7-1.500M12 10v4.500M12 14.500l-3 6M12 14.500l3 6" /></svg>
+      </button>
+      {open && (
+        <div id="a11y-panel" className="a11y-panel" role="region" aria-label="הגדרות נגישות">
+          <button onClick={() => setS({ ...s, size: Math.min(s.size + 1, 3) })}>הגדלת טקסט +</button>
+          <button onClick={() => setS({ ...s, size: Math.max(s.size - 1, 0) })}>הקטנת טקסט −</button>
+          <button aria-pressed={s.contrast} onClick={() => setS({ ...s, contrast: !s.contrast })}>ניגודיות גבוהה</button>
+          <button aria-pressed={s.links} onClick={() => setS({ ...s, links: !s.links })}>הדגשת קישורים</button>
+          <button onClick={() => setS({ size: 0, contrast: false, links: false })}>איפוס</button>
+          <a href="#accessibility" onClick={() => setOpen(false)}>הצהרת נגישות</a>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -349,6 +414,7 @@ export default function App() {
       </main>
       <Footer />
       <MobileBar />
+      <A11yToolbar />
     </>
   )
 }
