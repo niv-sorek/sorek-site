@@ -7,4 +7,4 @@ const years = () => ({
   transformIndexHtml: (html) => html.replaceAll('%YEARS%', String(new Date().getFullYear() - 1990)),
 })
 
-export default defineConfig({ plugins: [react(), years()], base: './' })
+export default defineConfig({ plugins: [react(), years()], base: '/' })

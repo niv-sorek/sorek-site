@@ -256,3 +256,18 @@ html.ul a { text-decoration: underline !important; }
 .faq summary { cursor: pointer; font-weight: 700; color: var(--navy); padding: 16px 0; }
 .faq details[open] summary { border-bottom: 1px solid var(--line); }
 .faq p { margin: 0; padding: 14px 0 18px; }
+
+.sec.first { padding-top: clamp(110px, 14vw, 150px); }
+.prose { max-width: 780px; }
+.prose h2 { font-size: 1.4rem; margin: 1.8em 0 .4em; }
+.lead-p { font-size: 1.15rem; color: var(--muted); }
+.more { display: inline-block; margin-top: 12px; font-weight: 700; }
+.more-card { display: block; text-decoration: none; color: inherit; }
+.more-card h3 { color: var(--navy); }
+.more-card p { color: var(--muted); margin: 0; }
+.nav a { white-space: nowrap; }
+@media (min-width: 901px) and (max-width: 1120px) {
+  .nav a { padding: 8px 8px; font-size: .95rem; }
+  .hdr-in { gap: 12px; }
+  .hdr-cta span { display: none; }
+}

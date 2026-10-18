@@ -15,9 +15,11 @@
 - [ ] Validate: Rich Results Test, PageSpeed, social preview
 
 ## Phase 3 – Ideas (need user input/content)
-- [ ] Real URLs instead of `#` routes; per-service pages (retaining walls, quantities, design review)
-- [ ] FAQ section + FAQ markup (needs real answers from Tal)
-- [ ] 1200x630 OG image (currently `hero.webp`)
+- [x] Real URLs + per-route prerender (`src/pages.js`, `scripts/prerender.mjs`): /structural-design/, /bill-of-quantities/, /design-review/, /projects/, /privacy/, /accessibility/, 404.html. Hebrew copy is a DRAFT - needs Tal's review
+- [ ] www.sorek.co.il still serves old site -> 301 to apex (DNS/host)
+- [ ] sameAs/social links, opening hours (need real data)
+- [x] FAQ section + FAQ markup (draft answers, need Tal's review)
+- [x] 1200x630 OG image
 - [ ] Add opening hours / social links to JSON-LD if available
 
 ## Handoff
