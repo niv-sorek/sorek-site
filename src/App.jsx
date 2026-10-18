@@ -456,7 +456,7 @@ function Privacy() {
 }
 
 export default function App() {
-  const read = () => (window.location.hash === '#accessibility' ? 'a11y' : window.location.hash === '#privacy' ? 'privacy' : 'home')
+  const read = () => typeof window === 'undefined' ? 'home' : (window.location.hash === '#accessibility' ? 'a11y' : window.location.hash === '#privacy' ? 'privacy' : 'home')
   const [page, setPage] = useState(read)
   useEffect(() => {
     const f = () => {
