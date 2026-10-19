@@ -93,7 +93,7 @@ function Hero() {
       <div className="wrap hero-in">
         <p className="eyebrow">משרד מהנדסים יועצים · חיפה ובכל הארץ</p>
         <h1>תכנון קונסטרוקציה<br />שבונים עליו בביטחון</h1>
-        <p className="lead">{YEARS} שנות ניסיון בתכנון קונסטרוקציות. פתרונות יצירתיים וכלכליים, בדיקת חלופות ועמידה בלוחות זמנים.</p>
+        <p className="lead">{YEARS} שנות ניסיון בתכנון קונסטרוקציות. פתרונות יצירתיים וכלכליים, בדיקת חלופות ועמידה בלוחות זמנים.</p>
         <div className="hero-cta">
           <a className="btn btn-primary btn-lg" href="#contact">קבלו הצעה לפרויקט <Icon name="arrow" /></a>
           <a className="btn btn-ghost btn-lg" href={`tel:${CONTACT.tel}`}><Icon name="phone" /> {CONTACT.phone}</a>

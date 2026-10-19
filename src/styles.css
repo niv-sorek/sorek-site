@@ -64,7 +64,7 @@ p { margin: 0 0 1em; }
 .hero-in { position: relative; padding: 130px 0 90px; max-width: 1180px; }
 .hero h1 { color: #fff; font-size: clamp(2.3rem, 6vw, 4.2rem); font-weight: 900; }
 .eyebrow { display: inline-block; font-weight: 700; color: #bfe6f7; letter-spacing: .03em; margin-bottom: 1rem; }
-.lead { font-size: clamp(1.05rem, 2vw, 1.35rem); max-width: 34em; color: #e6f1f7; margin-bottom: 2rem; }
+.lead { text-wrap: balance; font-size: clamp(1.05rem, 2vw, 1.35rem); max-width: 34em; color: #e6f1f7; margin-bottom: 2rem; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
 
 /* stats */
