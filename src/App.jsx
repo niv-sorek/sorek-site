@@ -91,7 +91,7 @@ function Hero() {
         ))}
       </div>
       <div className="wrap hero-in">
-        <p className="eyebrow">משרד מהנדסים יועצים · חיפה ובכל הארץ</p>
+        <p className="eyebrow">משרד מהנדסים בחיפה · עובדים בכל הארץ</p>
         <h1>תכנון קונסטרוקציה<br />שבונים עליו בביטחון</h1>
         <p className="lead">{YEARS} שנות ניסיון בתכנון קונסטרוקציות. פתרונות יצירתיים וכלכליים, בדיקת חלופות ועמידה בלוחות זמנים.</p>
         <div className="hero-cta">
